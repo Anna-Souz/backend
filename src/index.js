@@ -18,26 +18,44 @@
 
 
 // import mongoose from mongoose;
-import dotenv from "dotenv";
-import connectDB from "./db/index.js";
-// import{DB_NAME} from "./constants.js";
+// import dotenv from "dotenv";
+// import connectDB from "./db/index.js";
+// // import{DB_NAME} from "./constants.js";
 
 
-dotenv.config({
-    path:'./env'
-})
+// dotenv.config({
+//     path:'./env'
+// })
 
-connectDB()
-.then(()=>{
-    app.listen(process.env.PORT || 8000, ()=> {
-        console.log(`Server is running at port : ${process.env.PORT}`);
-    })
-})
-.catch((err) =>  {
-    console.log("mongoDb failed!!!",err);
-})
+// connectDB()
+// .then(()=>{
+//     app.listen(process.env.PORT || 8000, ()=> {
+//         console.log(`Server is running at port : ${process.env.PORT}`);
+//     })
+// })
+// .catch((err) =>  {
+//     console.log("mongoDb failed!!!",err);
+// })
 
 
+import mongoose from "mongoose";
+
+const connectDB = async () => {
+    try {
+        const connectionInstance = await mongoose.connect(
+            `${process.env.MONGODB_URI}/videotube`, {
+                useNewUrlParser: true,
+                useUnifiedTopology: true,
+            }
+        );
+        console.log(`\nMongoDB connected! DB HOST: ${connectionInstance.connection.host}`);
+    } catch (error) {
+        console.error("MONGODB connection error:", error.message);
+        process.exit(1); // Exit the process if DB connection fails
+    }
+};
+
+export default connectDB;
 
 
 
